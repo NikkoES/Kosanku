@@ -10,6 +10,8 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import id.co.kosankoding.kosanku.model.Penghuni;
+
 public class MainActivity extends AppCompatActivity {
 
     EditText editTextNama;
@@ -84,6 +86,19 @@ public class MainActivity extends AppCompatActivity {
                                 "Fasilitas: " + fasilitas + "\n" +
                                 "Alamat: " + alamat,
                         Toast.LENGTH_LONG).show();
+
+                // save ke database
+                Penghuni penghuni = new Penghuni();
+                penghuni.nama = nama;
+                penghuni.hp = hp;
+                penghuni.gender = gender;
+                penghuni.status = status;
+                penghuni.fasilitas = fasilitas;
+                penghuni.alamat = alamat;
+                penghuni.save();
+
+                // destroy main activity dan kembali ke list
+                finish();
             }
         });
 
