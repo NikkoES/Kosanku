@@ -39,9 +39,11 @@ public class PenghuniAdapter extends ArrayAdapter<Penghuni> {
         namaTextView.setText(penghuni.nama);
         statusTextView.setText(penghuni.status);
         genderTextView.setText(penghuni.gender);
-        hpTextView.setText(Long.toString(penghuni.hp));
+        hpTextView.setText(penghuni.hp);
 
         return view;
     }
+
+
 
 }

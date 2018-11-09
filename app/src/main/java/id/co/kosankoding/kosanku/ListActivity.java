@@ -3,6 +3,7 @@ package id.co.kosankoding.kosanku;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 
 import java.util.List;
@@ -62,15 +64,53 @@ public class ListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Penghuni penghuni = adapter2.getItem(position);
-                Toast.makeText(ListActivity.this, "" + penghuni.nama, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(ListActivity.this, "" + penghuni.nama, Toast.LENGTH_SHORT).show();
 
-//                Intent intent = new Intent(ListActivity.this, DetailActivity.class);
-//                intent.putExtra("id", siswa.getId());
-//                startActivity(intent);
+                Intent intent = new Intent(ListActivity.this, DetailActivity.class);
+                intent.putExtra("id", penghuni.getId());
+                startActivity(intent);
             }
         });
 
         registerForContextMenu(listView);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        if (v.getId() == R.id.listView) {
+            ListView lv = (ListView) v;
+            AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) menuInfo;
+            Penghuni penghuni = (Penghuni) lv.getItemAtPosition(acmi.position);
+
+            menu.add(Menu.NONE, 1, Menu.NONE, "Delete");
+            menu.add(Menu.NONE, 2, Menu.NONE, "Update");
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        Penghuni penghuni = adapter2.getItem(info.position);
+
+        if (item.getItemId() == 1) { // kondisi hapus
+
+            // delete dari listView
+            adapter2.remove(penghuni);
+
+            // delete dari database
+            new Delete().from(Penghuni.class).where("id=?", penghuni.getId()).execute();
+
+            // refresh listView
+            adapter2.notifyDataSetChanged();
+        } else if (item.getItemId() == 2) { // kondisi edit
+
+            // mengirim id via intent ke halaman form
+            Intent intent = new Intent(ListActivity.this, MainActivity.class);
+            intent.putExtra("id", penghuni.getId());
+            startActivity(intent);
+        }
+
+        return super.onContextItemSelected(item);
     }
 
     @Override
