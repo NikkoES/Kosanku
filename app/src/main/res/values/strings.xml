@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Kosanku</string>
+    <array name="status">
+        <item>Tidak Sekolah</item>
+        <item>Siswa</item>
+        <item>Mahasiswa</item>
+        <item>Pekerja</item>
+    </array>
+</resources>
